@@ -1,3 +1,3 @@
-ProductNo,Productname,Quantity,Price,Discount
-22,qq,22,22.0,22.0
-11,zz,11,11.0,11.0
+ProductNo,ProductName,Quantity,Price,Discount,DiscountedPrice
+22,QQ,22,22.0,22.0,17.16
+11,CC,55,100.0,10.0,90.0

@@ -8,7 +8,7 @@ public class Intro {
 
    public void introMsg()
    {
-       System.out.println("Welcome to The SUPERMARKET");
+       System.out.println("WELCOME TO THE SUPERMARKET");
 
    }
 

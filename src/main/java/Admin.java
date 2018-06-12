@@ -2,86 +2,99 @@ import products.Product;
 
 import java.io.*;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Scanner;
 
 public class Admin {
 
     private static String csvfile = "shop.csv";
-    private List<Product> allProducts = new ArrayList<>();
+    private List<Product> allProducts ;
 
-    public void loadProducts() {
-        try {
-            Files.lines(Paths.get("shop.csv")).skip(1).forEach(s -> {
-                Product p1 = new Product();
-                String [] record= s.split(",");
-                p1.setProductNo(Integer.parseInt(record[0]));
-                p1.setProductName(record[1]);
-                p1.setQuantity(Integer.parseInt(record[2]));
-                p1.setPrice(Float.parseFloat(record[3]));
-                p1.setDiscount(Float.parseFloat(record[4]));
 
-                allProducts.add(p1);
-            });
+//    public static void main(String args[]) {
+//        Admin a = new Admin();
+//        Product p = new Product();
+////        a.writeProduct();
+////        a.writeProduct();
+//
+//        p.loadProducts();
+//        //p.printProducts();
+//        a.getProductList(p);
+//
+//        a.displayAll();
+//        p = a.enterProductDetails();
+//        a.addToList(p);
+//        p = a.enterProductDetails();
+//        a.addToList(p);
+//        p = a.enterProductDetails();
+//        a.addToList(p);
+//
+//        a.displayAll();
+//        a.displaySpecial(22);
+//        a.modifyProduct(44);
+//        a.displayAll();
+//        a.deleteProduct(33);
+//        a.displayAll();
+//        a.writeProduct();
+//        //  a.createProduct();
+//        //p.showProduct();
+//
+//    }
 
-        } catch (IOException e) {
-
-        }
+    public void getProductList(Product p)
+    {
+        //Product pp = new Product();
+        allProducts = p.getListOfProducts();
     }
 
     public Product enterProductDetails() {
 
-        Product p = new Product();
+        Product p1 = new Product();
         Scanner in = new Scanner(System.in);
 
         System.out.println("Enter Product Number of the Product:  ");
         //int x = in.nextInt();
-         p.setProductNo(in.nextInt());
+        p1.setProductNo(in.nextInt());
 
         System.out.println("Enter Name of the Product:  ");
-        p.setProductName(in.next());
+        p1.setProductName(in.next());
 
         System.out.println("Enter Quantity of the Product:  ");
-        p.setQuantity(in.nextInt());
+        p1.setQuantity(in.nextInt());
 
         System.out.println("Enter Price of the Product:  ");
-        p.setPrice (in.nextFloat());
+        float price = in.nextFloat();
+        p1.setPrice(price);
 
         System.out.println("Enter Discount of the Product:  ");
-        p.setDiscount(in.nextFloat());
+        float discount = in.nextFloat();
+        p1.setDiscount(discount);
+
+        float discountedprice = price * (1 - (discount/100));
+        p1.setDiscountedPrice(discountedprice);
 
 
-        return (p);
+        return (p1);
     }
 
-    void addToList(Product p)
-    {
-        allProducts.add(p);
+    void addToList(Product p1) {
+        //Product pp = new Product();
+        allProducts.add(p1);
     }
 
-    void showProduct(Product p1) {
-        System.out.println("The Product No. of The Product : " + p1.getProductNo());
-        System.out.println("The Name of The Product :  " + p1.getProductName());
-        System.out.println("The available Quantity of The Product : " + p1.getQuantity());
-        System.out.println("The price of The Product : " + p1.getPrice());
-        System.out.println("Discount : " + p1.getDiscount() + " %");
+
+    void displayAll() {
+        System.out.println("**********************************************");
+        System.out.println("Displaying All Products");
+        System.out.println("**********************************************");
+        for (Product product : allProducts) {
+
+            System.out.println(product.toString());
+        }
 
     }
-
-   void displayAll()
-   {   System.out.println("**********************************************");
-       System.out.println("Displaying All Products");
-       System.out.println("**********************************************");
-       for (Product product : allProducts) {
-
-           System.out.println(product.toString());
-       }
-
-   }
 
     void writeProduct() {
 //        Product p1;
@@ -90,18 +103,15 @@ public class Admin {
 
         PrintWriter writer = null;
         try {
-            writer = new PrintWriter( new FileOutputStream(new File(csvfile)));
+            writer = new PrintWriter(new FileOutputStream(new File(csvfile)));
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-        writer.write("ProductNo,Productname,Quantity,Price,Discount");
-        for (Product p1 : allProducts)
-        {
+        writer.write("ProductNo,ProductName,Quantity,Price,Discount,DiscountedPrice");
+        for (Product p1 : allProducts) {
 
             writer.write(p1.toCsvString());
         }
-
-
 
 
         writer.close();
@@ -109,18 +119,15 @@ public class Admin {
         System.out.println("Products added to file ");
 
 
-
     }
 
-
-
-    void displaySpecial(int pno)
-    {   System.out.println("**********************************************");
+    void displaySpecial(int pno) {
+        System.out.println("**********************************************");
         System.out.println("Displaying Special Product");
 
         for (Product product : allProducts) {
 
-            if(product.getProductNo() == pno) {
+            if (product.getProductNo() == pno) {
                 System.out.println(product.toString());
                 break;
             }
@@ -128,31 +135,28 @@ public class Admin {
 
     }
 
+    void deleteProduct(int pno) {
+        System.out.println("**********************************************");
+        System.out.println("Deleting Product");
+        for (Product product : allProducts) {
 
-   void  deleteProduct(int pno)
-   {  System.out.println("**********************************************");
-       System.out.println("Deleting Product");
-       for (Product product : allProducts) {
+            if (product.getProductNo() == pno) {
+                allProducts.remove(product);
+                break;
+            }
+        }
+    }
 
-           if(product.getProductNo()==pno)
-           {
-               allProducts.remove(product);
-               break;
-           }
-       }
-   }
-
-    void modifyProduct(int pno)
-    {
+    void modifyProduct(int pno) {
         System.out.println("**********************************************");
         System.out.println("Modifying Product");
-        int i ;
-     Product p1 = new Product();
+        int i;
+        Product p1 = new Product();
 
         for (i = 0; i < allProducts.size(); i++) {
 
-            if(allProducts.get(i).getProductNo()==pno)
-            {   p1 = enterProductDetails();
+            if (allProducts.get(i).getProductNo() == pno) {
+                p1 = enterProductDetails();
                 break;
             }
 
@@ -160,35 +164,6 @@ public class Admin {
 
         allProducts.set(i, p1);
     }
-
-
-
-    public static void main(String args[]) {
-        Admin a = new Admin();
-      Product p = new Product();
-//        a.writeProduct();
-//        a.writeProduct();
-        a.loadProducts();
-        a.displayAll();
-        p=a.enterProductDetails();
-         a.addToList(p);
-      p=a.enterProductDetails();
-        a.addToList(p);
-        p=a.enterProductDetails();
-        a.addToList(p);
-
-        a.displayAll();
-        a.displaySpecial(22);
-        a.modifyProduct(44);
-        a.displayAll();
-        a.deleteProduct(33);
-        a.displayAll();
-        a.writeProduct();
-       //  a.createProduct();
-        //p.showProduct();
-
-    }
-
 
 
 }
