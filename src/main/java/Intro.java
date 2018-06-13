@@ -1,7 +1,9 @@
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.Scanner;
+import admin.*;
+import customer.*;
+
+
+import static java.lang.System.exit;
 
 public class Intro {
 
@@ -14,6 +16,8 @@ public class Intro {
 
    public void displayMenu()
    { Scanner in = new Scanner(System.in);
+       Customer c = new Customer();
+       Admin a = new Admin();
      char ch;
    do
        {
@@ -24,17 +28,23 @@ public class Intro {
            System.out.println("\n\n\t03. EXIT");
            System.out.println("\n\n\tPlease Select Your Option (1-3) ");
            ch = in.next().charAt(0);
-//           switch(ch)
-//           {
-//               case '1': system("cls");
-//                   place_order(l);
-//                   getch();
-//                   break;
-//               case '2': admin_menu(l);
-//                   break;
-//               case '3':exit(0);
-//               default :printf("Wrong Choice");
-//           }
+           switch(ch)
+           {
+               case '1':
+                  c.placeOrder();
+                  a.writeProduct();
+                   break;
+
+               case '2':
+                   a.adminMenu();
+                  // a.writeProduct();
+                   break;
+
+               case '3':
+                   exit(0);
+
+                   default :System.out.println("Wrong Choice");
+           }
        }while(ch!='3');
    }
 
@@ -45,5 +55,6 @@ public class Intro {
             Intro i = new Intro() ;
              i.introMsg();
              i.displayMenu();
+
     }
 }

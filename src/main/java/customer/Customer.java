@@ -1,4 +1,6 @@
+package customer;
 import products.Product;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -6,27 +8,28 @@ import java.util.Scanner;
 
 public class Customer {
 
+     Product p = new Product();
     private List<Product> allProducts ;
     private List<Product> cart = new ArrayList<>();
 
-    public static void main(String args[]){
-        Customer c = new Customer();
-        Product p = new Product();
-        p.loadProducts();
-
-        c.getProductList(p);
-        c.placeOrder();
-
-        c.showCart();
-        c.showProductMenu();
-        c.deleteFomCart();
-        c.showCart();
-        c.showProductMenu();
-        c.checkOut();
-
-
-
-    }
+//    public static void main(String args[]){
+//        Customer c = new Customer();
+//       // Product p = new Product();
+//        p.loadProducts();
+//
+//        c.getProductList(p);
+//        c.placeOrder();
+//
+//        c.showCart();
+//        c.showProductMenu();
+//        c.deleteFomCart();
+//        c.showCart();
+//        c.showProductMenu();
+//        c.checkOut();
+//
+//
+//
+//    }
 
     public void showProductMenu(){
      System.out.println("\n\n\t\t\t\t\t\t\tPRODUCT MENU");
@@ -49,6 +52,8 @@ public class Customer {
 
     public void placeOrder()
     {
+        p.loadProducts();
+        getProductList(p);
         showProductMenu();
         Scanner in = new Scanner(System.in);
         int ch;
@@ -60,6 +65,7 @@ public class Customer {
         }while(ch!=0);
 
         System.out.println("\n\nThank You For Placing The Order");
+        customerMenu();
     }
 
     public void addToCart()
@@ -96,6 +102,8 @@ public class Customer {
 
             for(Product p : cart)
                 System.out.println(p.toString());
+
+            customerMenu();
         }
 
         public void deleteFomCart()
@@ -127,6 +135,7 @@ public class Customer {
                     break;
                 }
             }
+            customerMenu();
         }
 
         public void checkOut() {
@@ -143,6 +152,34 @@ public class Customer {
             }
 
             System.out.println("Total Price: "+totalPrice);
+        }
+
+        public void customerMenu()
+        { Scanner in = new Scanner(System.in);
+          int ch;
+
+        while(true)
+            {
+                System.out.println("\n\n\n\t1.VIEW YOUR CART");
+                System.out.println("\n\n\t2.DELETE FROM CART");
+                System.out.println("\n\n\t3.PROCEED FOR CHECKOUT");
+                ch = in.nextInt();
+
+                switch(ch)
+                {
+                    case 1 : showCart();
+                    //showProductMenu();
+                    break;
+                    case 2 : deleteFomCart();
+                    break;
+                    case 3 : checkOut();
+                            break;
+
+                }
+                break;
+            }
+            return;
+
         }
 }
 

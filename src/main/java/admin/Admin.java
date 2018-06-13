@@ -1,9 +1,11 @@
+package admin;
+
 import products.Product;
 
-import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.ArrayList;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.PrintWriter;
 import java.util.List;
 import java.util.Scanner;
 
@@ -11,6 +13,7 @@ public class Admin {
 
     private static String csvfile = "shop.csv";
     private List<Product> allProducts ;
+    Product p =new Product();
 
 
 //    public static void main(String args[]) {
@@ -72,20 +75,20 @@ public class Admin {
         float discount = in.nextFloat();
         p1.setDiscount(discount);
 
-        float discountedprice = price * (1 - (discount/100));
-        p1.setDiscountedPrice(discountedprice);
+        float dPrice = price * (1 - (discount/100));
+        p1.setDiscountedPrice(dPrice);
 
 
         return (p1);
     }
 
-    void addToList(Product p1) {
+    public void addToList(Product p1) {
         //Product pp = new Product();
         allProducts.add(p1);
     }
 
 
-    void displayAll() {
+    public void displayAll() {
         System.out.println("**********************************************");
         System.out.println("Displaying All Products");
         System.out.println("**********************************************");
@@ -96,7 +99,7 @@ public class Admin {
 
     }
 
-    void writeProduct() {
+    public void writeProduct() {
 //        Product p1;
 //        p1 = enterProductDetails();
 //        allProducts.add(p1);
@@ -121,9 +124,13 @@ public class Admin {
 
     }
 
-    void displaySpecial(int pno) {
+    public void displaySpecial() {
+        Scanner in = new Scanner(System.in);
         System.out.println("**********************************************");
-        System.out.println("Displaying Special Product");
+        System.out.println("Enter the Product No. of the Product which you want the details: ");
+        int pno = in.nextInt();
+
+        System.out.println("\nDisplaying Special Product");
 
         for (Product product : allProducts) {
 
@@ -135,9 +142,13 @@ public class Admin {
 
     }
 
-    void deleteProduct(int pno) {
+    public void deleteProduct() {
+        Scanner in = new Scanner(System.in);
         System.out.println("**********************************************");
-        System.out.println("Deleting Product");
+        System.out.println("Enter the Product No. of the Product you want to delete: ");
+        int pno = in.nextInt();
+
+        System.out.println("\nDeleting Product");
         for (Product product : allProducts) {
 
             if (product.getProductNo() == pno) {
@@ -147,8 +158,12 @@ public class Admin {
         }
     }
 
-    void modifyProduct(int pno) {
+   public void modifyProduct() {
+        Scanner in = new Scanner(System.in);
         System.out.println("**********************************************");
+        System.out.println("Enter the Product No. of the Product you want to modify: ");
+        int pno = in.nextInt();
+
         System.out.println("Modifying Product");
         int i;
         Product p1 = new Product();
@@ -156,6 +171,7 @@ public class Admin {
         for (i = 0; i < allProducts.size(); i++) {
 
             if (allProducts.get(i).getProductNo() == pno) {
+                System.out.println("Please enter new details: ");
                 p1 = enterProductDetails();
                 break;
             }
@@ -163,6 +179,45 @@ public class Admin {
         }
 
         allProducts.set(i, p1);
+    }
+
+    public void adminMenu()
+    {
+        Scanner in = new Scanner(System.in);
+        int ch;
+        p.loadProducts();
+        getProductList(p);
+
+        while(true) {
+            System.out.println("\n\n\n\tADMIN MENU");
+            System.out.println("\n\n\t1.CREATE PRODUCT");
+            System.out.println("\n\n\t2.DISPLAY ALL PRODUCTS");
+            System.out.println("\n\n\t3.QUERY ");
+            System.out.println("\n\n\t4.MODIFY PRODUCT");
+            System.out.println("\n\n\t5.DELETE PRODUCT");
+            System.out.println("\n\n\t6.BACK TO MAIN MENU");
+            System.out.println("\n\n\tPlease Enter Your Choice (1-6) ");
+            ch = in.nextInt();
+
+            switch(ch)
+            {
+                case 1 :
+                    p = enterProductDetails();
+                   addToList(p);
+                break;
+                case 2 : displayAll();
+                break;
+                case 3 : displaySpecial();
+                break;
+                case 4 : modifyProduct();
+                break;
+                case 5 : deleteProduct();
+                break;
+                case 6 : writeProduct();
+                    return;
+
+            }
+        }
     }
 
 
