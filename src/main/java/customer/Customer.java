@@ -12,24 +12,10 @@ public class Customer {
     private List<Product> allProducts ;
     private List<Product> cart = new ArrayList<>();
 
-//    public static void main(String args[]){
-//        Customer c = new Customer();
-//       // Product p = new Product();
-//        p.loadProducts();
-//
-//        c.getProductList(p);
-//        c.placeOrder();
-//
-//        c.showCart();
-//        c.showProductMenu();
-//        c.deleteFomCart();
-//        c.showCart();
-//        c.showProductMenu();
-//        c.checkOut();
-//
-//
-//
-//    }
+    public Customer (ArrayList<Product> listOfProducts)
+    {
+        allProducts = listOfProducts;
+    }
 
     public void showProductMenu(){
      System.out.println("\n\n\t\t\t\t\t\t\tPRODUCT MENU");
@@ -44,16 +30,11 @@ public class Customer {
 
     }
 
-    public void getProductList(Product p)
-    {
-        //Product pp = new Product();
-        allProducts = p.getListOfProducts();
-    }
+
 
     public void placeOrder()
     {
-        p.loadProducts();
-        getProductList(p);
+
         showProductMenu();
         Scanner in = new Scanner(System.in);
         int ch;
@@ -73,6 +54,7 @@ public class Customer {
         Scanner in =new Scanner(System.in);
         System.out.println("Enter product Number: ");
         pno=in.nextInt();
+
         System.out.println("Enter Quantity of the Product: ");
         qty=in.nextInt();
 
@@ -80,7 +62,10 @@ public class Customer {
         { if((p.getProductNo() == pno) && (p.getQuantity() >= qty))
             {
                 p.setQuantity(p.getQuantity()- qty);
-
+                if(p.getQuantity()==0)
+                {
+                    allProducts.remove(p);
+                }
                 Product cartProduct = new Product(p);
                 cartProduct.setQuantity(qty);
                 cart.add(cartProduct);
@@ -107,11 +92,12 @@ public class Customer {
         }
 
         public void deleteFomCart()
-        {   int pno;
+        {   int pno,f=0;
 
             Scanner in =new Scanner(System.in);
             System.out.println("Enter product Number: ");
             pno=in.nextInt();
+
 
             for(Product p : cart)
             {
@@ -132,11 +118,20 @@ public class Customer {
                      }
                           System.out.println("Product deleted from Cart!");
                     }
+                    f=1;
                     break;
                 }
+
+
+            }
+
+            if(f==0)
+            {
+                System.out.println("Product Id not found!");
             }
             customerMenu();
         }
+
 
         public void checkOut() {
             float totalPrice = 0;
@@ -173,7 +168,8 @@ public class Customer {
                     case 2 : deleteFomCart();
                     break;
                     case 3 : checkOut();
-                            break;
+                             cart.clear();
+                             break;
 
                 }
                 break;

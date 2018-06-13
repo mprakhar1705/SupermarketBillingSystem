@@ -1,11 +1,5 @@
 package products;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
-
 public class Product{
 
    private int productNo;
@@ -14,7 +8,7 @@ public class Product{
    private float price;
    private float discount;
    private float discountedPrice;
-   private List<Product> listOfProducts = new ArrayList<>();
+
 
    public  Product ()
    {
@@ -102,34 +96,5 @@ public class Product{
    public float getDiscountedPrice() { return discountedPrice; }
 
    public void setDiscountedPrice(float discountedPrice) {this.discountedPrice = discountedPrice;}
-
-   public List<Product> getListOfProducts() {
-      return listOfProducts;
-   }
-
-   public void setListOfProducts(List<Product> listOfProducts) {
-      this.listOfProducts = listOfProducts;
-   }
-
-   public void loadProducts() {
-      try {
-         Files.lines(Paths.get("shop.csv")).skip(1).forEach(s -> {
-            Product p1 = new Product();
-            String[] record = s.split(",");
-            p1.setProductNo(Integer.parseInt(record[0]));
-            p1.setProductName(record[1]);
-            p1.setQuantity(Integer.parseInt(record[2]));
-            p1.setPrice(Float.parseFloat(record[3]));
-            p1.setDiscount(Float.parseFloat(record[4]));
-            p1.setDiscountedPrice(Float.parseFloat(record[5]));
-           //System.out.println("hi");
-            listOfProducts.add(p1);
-         });
-
-      } catch (IOException e) {
-
-      }
-   }
-
 
 }

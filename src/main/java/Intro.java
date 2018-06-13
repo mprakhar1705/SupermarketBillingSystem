@@ -1,12 +1,35 @@
+import admin.Admin;
+import customer.Customer;
+import products.Product;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Scanner;
-import admin.*;
-import customer.*;
-
 
 import static java.lang.System.exit;
 
 public class Intro {
+    private ArrayList<Product> listOfProducts = new ArrayList<>();
 
+    public void loadProducts() {
+        try {
+            Files.lines(Paths.get("shop.csv")).skip(1).forEach(s -> {
+                Product p1 = new Product();
+                String[] record = s.split(",");
+                p1.setProductNo(Integer.parseInt(record[0]));
+                p1.setProductName(record[1]);
+                p1.setQuantity(Integer.parseInt(record[2]));
+                p1.setPrice(Float.parseFloat(record[3]));
+                p1.setDiscount(Float.parseFloat(record[4]));
+                p1.setDiscountedPrice(Float.parseFloat(record[5]));
+                listOfProducts.add(p1);
+            });
+
+        } catch (IOException e) {
+
+        }
+    }
 
    public void introMsg()
    {
@@ -16,12 +39,12 @@ public class Intro {
 
    public void displayMenu()
    { Scanner in = new Scanner(System.in);
-       Customer c = new Customer();
-       Admin a = new Admin();
+       Customer c = new Customer(listOfProducts);
+       Admin a = new Admin(listOfProducts);
      char ch;
    do
        {
-           //system("cls");
+
            System.out.println("\n\n\n\tMAIN MENU");
            System.out.println("\n\n\t01. CUSTOMER");
            System.out.println("\n\n\t02. ADMINISTRATOR");
@@ -32,7 +55,6 @@ public class Intro {
            {
                case '1':
                   c.placeOrder();
-                  a.writeProduct();
                    break;
 
                case '2':
@@ -54,6 +76,7 @@ public class Intro {
     {
             Intro i = new Intro() ;
              i.introMsg();
+             i.loadProducts();
              i.displayMenu();
 
     }

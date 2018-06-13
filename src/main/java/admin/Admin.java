@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -15,71 +16,93 @@ public class Admin {
     private List<Product> allProducts ;
     Product p =new Product();
 
-
-//    public static void main(String args[]) {
-//        Admin a = new Admin();
-//        Product p = new Product();
-////        a.writeProduct();
-////        a.writeProduct();
-//
-//        p.loadProducts();
-//        //p.printProducts();
-//        a.getProductList(p);
-//
-//        a.displayAll();
-//        p = a.enterProductDetails();
-//        a.addToList(p);
-//        p = a.enterProductDetails();
-//        a.addToList(p);
-//        p = a.enterProductDetails();
-//        a.addToList(p);
-//
-//        a.displayAll();
-//        a.displaySpecial(22);
-//        a.modifyProduct(44);
-//        a.displayAll();
-//        a.deleteProduct(33);
-//        a.displayAll();
-//        a.writeProduct();
-//        //  a.createProduct();
-//        //p.showProduct();
-//
-//    }
-
-    public void getProductList(Product p)
+    public Admin(ArrayList<Product> listOfProduct)
     {
-        //Product pp = new Product();
-        allProducts = p.getListOfProducts();
+        allProducts = listOfProduct;
     }
 
     public Product enterProductDetails() {
 
         Product p1 = new Product();
         Scanner in = new Scanner(System.in);
+        int pno,qty;
+        float price,discount;
+        String s;
+        boolean pnoFlag,pnoPositive,qtyFlag,priceFlag,discountFlag;
 
-        System.out.println("Enter Product Number of the Product:  ");
-        //int x = in.nextInt();
-        p1.setProductNo(in.nextInt());
+        do { pnoPositive=true;
+            System.out.println("Enter Product Number of the Product:  ");
+             pno = in.nextInt();
+            pnoFlag = checkIfExists(pno);
+            if (!pnoFlag)
+                p1.setProductNo(pno);
+            else System.out.println("Product Id already exists!");
+
+            if(pno<0)
+            {
+                System.out.println("Invalid Product Id ");
+                pnoPositive=false;
+            }
+        }while(pnoFlag || !pnoPositive);
 
         System.out.println("Enter Name of the Product:  ");
-        p1.setProductName(in.next());
+         s =in.next();
+        p1.setProductName(s);
 
-        System.out.println("Enter Quantity of the Product:  ");
-        p1.setQuantity(in.nextInt());
+       do {
+           qtyFlag=true;
+           System.out.println("Enter Quantity of the Product:  ");
+           qty = in.nextInt();
+           if(qty>0)
+           p1.setQuantity(qty);
 
-        System.out.println("Enter Price of the Product:  ");
-        float price = in.nextFloat();
-        p1.setPrice(price);
+           else
+           { qtyFlag=false;
+               System.out.println("Invalid Quantity ");
+           }
+       }while (!qtyFlag);
 
-        System.out.println("Enter Discount of the Product:  ");
-        float discount = in.nextFloat();
-        p1.setDiscount(discount);
+       do { priceFlag=true;
+           System.out.println("Enter Price of the Product:  ");
+           price = in.nextFloat();
+           if(price>0)
+           p1.setPrice(price);
+           else
+           { priceFlag=false;
+               System.out.println("Invalid Price ");
+           }
+       }while (!priceFlag);
+
+
+       do {
+           discountFlag=true;
+           System.out.println("Enter Discount of the Product:  ");
+           discount = in.nextFloat();
+           if(discount>=0)
+           p1.setDiscount(discount);
+           else
+           { discountFlag=false;
+               System.out.println("Invalid Discount ");
+           }
+
+       }while (!discountFlag);
 
         float dPrice = price * (1 - (discount/100));
         p1.setDiscountedPrice(dPrice);
 
 
         return (p1);
+    }
+
+    boolean checkIfExists(int pno)
+    {
+        for (Product product : allProducts) {
+
+            if (product.getProductNo() == pno) {
+               return true;
+            }
+        }
+        return false;
     }
 
     public void addToList(Product p1) {
@@ -126,40 +149,52 @@ public class Admin {
 
     public void displaySpecial() {
         Scanner in = new Scanner(System.in);
+        int f=0;
         System.out.println("**********************************************");
         System.out.println("Enter the Product No. of the Product which you want the details: ");
         int pno = in.nextInt();
 
-        System.out.println("\nDisplaying Special Product");
+
 
         for (Product product : allProducts) {
 
             if (product.getProductNo() == pno) {
+                System.out.println("\nProduct Details are as follows: ");
                 System.out.println(product.toString());
+                f=1;
                 break;
             }
         }
+
+         if(f==0)
+             System.out.println("Sorry! Cannot find a Product with ID "+pno+"\n");
 
     }
 
     public void deleteProduct() {
         Scanner in = new Scanner(System.in);
+        int f=0;
         System.out.println("**********************************************");
         System.out.println("Enter the Product No. of the Product you want to delete: ");
         int pno = in.nextInt();
 
-        System.out.println("\nDeleting Product");
+
         for (Product product : allProducts) {
 
             if (product.getProductNo() == pno) {
                 allProducts.remove(product);
+                f=1;
+                System.out.println("\nProduct Deletion Successful!");
                 break;
             }
         }
+        if(f==0)
+            System.out.println("Sorry! Cannot find a Product with ID "+pno+"\n");
     }
 
    public void modifyProduct() {
         Scanner in = new Scanner(System.in);
+        int f=0;
         System.out.println("**********************************************");
         System.out.println("Enter the Product No. of the Product you want to modify: ");
         int pno = in.nextInt();
@@ -173,30 +208,34 @@ public class Admin {
             if (allProducts.get(i).getProductNo() == pno) {
                 System.out.println("Please enter new details: ");
                 p1 = enterProductDetails();
+                allProducts.set(i, p1);
+                f=1;
+                System.out.println("\nProduct Deletion Successful!");
                 break;
             }
 
         }
+       if(f==0)
+           System.out.println("Sorry! Cannot find a Product with ID "+pno+"\n");
 
-        allProducts.set(i, p1);
     }
 
     public void adminMenu()
     {
         Scanner in = new Scanner(System.in);
         int ch;
-        p.loadProducts();
-        getProductList(p);
+//        p.loadProducts();
+//        getProductList(p);
 
         while(true) {
             System.out.println("\n\n\n\tADMIN MENU");
-            System.out.println("\n\n\t1.CREATE PRODUCT");
-            System.out.println("\n\n\t2.DISPLAY ALL PRODUCTS");
-            System.out.println("\n\n\t3.QUERY ");
-            System.out.println("\n\n\t4.MODIFY PRODUCT");
-            System.out.println("\n\n\t5.DELETE PRODUCT");
-            System.out.println("\n\n\t6.BACK TO MAIN MENU");
-            System.out.println("\n\n\tPlease Enter Your Choice (1-6) ");
+            System.out.println("\t1.CREATE PRODUCT");
+            System.out.println("\t2.DISPLAY ALL PRODUCTS");
+            System.out.println("\t3.QUERY ");
+            System.out.println("\t4.MODIFY PRODUCT");
+            System.out.println("\t5.DELETE PRODUCT");
+            System.out.println("\t6.BACK TO MAIN MENU");
+            System.out.println("\tPlease Enter Your Choice (1-6) ");
             ch = in.nextInt();
 
             switch(ch)
@@ -215,6 +254,8 @@ public class Admin {
                 break;
                 case 6 : writeProduct();
                     return;
+
+                    default: System.out.println("Wrong Choice!");
 
             }
         }
