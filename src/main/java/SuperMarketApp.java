@@ -1,6 +1,7 @@
 import admin.Admin;
 import customer.Customer;
 import products.Product;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -9,7 +10,7 @@ import java.util.Scanner;
 
 import static java.lang.System.exit;
 
-public class Intro {
+public class SuperMarketApp {
     private ArrayList<Product> listOfProducts = new ArrayList<>();
 
     public void loadProducts() {
@@ -37,6 +38,14 @@ public class Intro {
 
    }
 
+    public static void main(String args[]) {
+        SuperMarketApp i = new SuperMarketApp();
+        i.introMsg();
+        i.loadProducts();
+        i.displayMenu();
+
+    }
+
    public void displayMenu()
    { Scanner in = new Scanner(System.in);
        Customer c = new Customer(listOfProducts);
@@ -63,21 +72,11 @@ public class Intro {
                    break;
 
                case '3':
+                   a.writeProduct();
                    exit(0);
 
                    default :System.out.println("Wrong Choice");
            }
        }while(ch!='3');
    }
-
-
-
-    public static void main(String args[])
-    {
-            Intro i = new Intro() ;
-             i.introMsg();
-             i.loadProducts();
-             i.displayMenu();
-
-    }
 }

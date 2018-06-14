@@ -142,8 +142,6 @@ public class Admin {
 
         writer.close();
 
-        System.out.println("Products added to file ");
-
 
     }
 
