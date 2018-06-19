@@ -16,9 +16,15 @@ public class Admin {
     private List<Product> allProducts ;
     Product p =new Product();
 
+
+
     public Admin(ArrayList<Product> listOfProduct)
     {
         allProducts = listOfProduct;
+    }
+
+    public Admin() {
+
     }
 
     public Product enterProductDetails() {
@@ -28,9 +34,9 @@ public class Admin {
         int pno,qty;
         float price,discount;
         String s;
-        boolean pnoFlag,pnoPositive,qtyFlag,priceFlag,discountFlag;
+        boolean pnoFlag,ispnoPositive,isQtyValid,isPriceValid,isDiscountValid;
 
-        do { pnoPositive=true;
+        do { ispnoPositive=true;
             System.out.println("Enter Product Number of the Product:  ");
              pno = in.nextInt();
             pnoFlag = checkIfExists(pno);
@@ -41,51 +47,51 @@ public class Admin {
             if(pno<0)
             {
                 System.out.println("Invalid Product Id ");
-                pnoPositive=false;
+                ispnoPositive=false;
             }
-        }while(pnoFlag || !pnoPositive);
+        }while(pnoFlag || !ispnoPositive);
 
         System.out.println("Enter Name of the Product:  ");
          s =in.next();
         p1.setProductName(s);
 
        do {
-           qtyFlag=true;
+           isQtyValid=true;
            System.out.println("Enter Quantity of the Product:  ");
            qty = in.nextInt();
            if(qty>0)
            p1.setQuantity(qty);
 
            else
-           { qtyFlag=false;
+           { isQtyValid=false;
                System.out.println("Invalid Quantity ");
            }
-       }while (!qtyFlag);
+       }while (!isQtyValid);
 
-       do { priceFlag=true;
+       do { isPriceValid=true;
            System.out.println("Enter Price of the Product:  ");
            price = in.nextFloat();
            if(price>0)
            p1.setPrice(price);
            else
-           { priceFlag=false;
+           { isPriceValid=false;
                System.out.println("Invalid Price ");
            }
-       }while (!priceFlag);
+       }while (!isPriceValid);
 
 
        do {
-           discountFlag=true;
+           isDiscountValid=true;
            System.out.println("Enter Discount of the Product:  ");
            discount = in.nextFloat();
            if(discount>=0)
            p1.setDiscount(discount);
            else
-           { discountFlag=false;
+           { isDiscountValid=false;
                System.out.println("Invalid Discount ");
            }
 
-       }while (!discountFlag);
+       }while (!isDiscountValid);
 
         float dPrice = price * (1 - (discount/100));
         p1.setDiscountedPrice(dPrice);
@@ -208,7 +214,7 @@ public class Admin {
                 p1 = enterProductDetails();
                 allProducts.set(i, p1);
                 f=1;
-                System.out.println("\nProduct Deletion Successful!");
+                System.out.println("\nProduct Modification Successful!");
                 break;
             }
 

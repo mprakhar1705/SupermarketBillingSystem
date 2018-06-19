@@ -2,6 +2,7 @@ package products;
 
 public class Product{
 
+   public static final String TAB_SPACES = "\t\t\t";
    private int productNo;
    private String productName;
    private int quantity;
@@ -10,15 +11,24 @@ public class Product{
    private float discountedPrice;
 
 
-   public  Product ()
-   {
-
+   public  Product () {
    }
+
+   public Product(int productNo, String productName, int quantity, float price, float discount, float discountedPrice) {
+      this.productNo = productNo;
+      this.productName = productName;
+      this.quantity = quantity;
+      this.price = price;
+      this.discount = discount;
+      this.discountedPrice=discountedPrice;
+   }
+
    public Product (Product p)
    {
       productNo = p.productNo;
       productName = p.productName;
       quantity = p.quantity;
+
       price = p.price;
       discount = p.discount;
       discountedPrice = p.discountedPrice;
@@ -39,14 +49,13 @@ public class Product{
 
    public String toStringMenuStyle()
    {
-      return productNo + "\t\t\t" + productName +  "\t\t\t"+quantity+"\t\t\t\t"+ price + "\t\t\t"+discount+"%"+ "\t\t\t"
+      return productNo + TAB_SPACES + productName + TAB_SPACES +quantity+"\t\t\t\t"+ price + TAB_SPACES +discount+"%"+ TAB_SPACES
               +discountedPrice;
    }
 
    public String toStringCheckout()
    {
-      return productNo + "\t\t\t" + productName +  "\t\t\t"+quantity+"\t\t\t\t"+ price + "\t\t\t"+discount+"%"+ "\t\t\t"
-              +discountedPrice+"\t\t\t"+discountedPrice*quantity;
+      return toStringMenuStyle() + TAB_SPACES + discountedPrice*quantity;
    }
 
    public String toCsvString() {

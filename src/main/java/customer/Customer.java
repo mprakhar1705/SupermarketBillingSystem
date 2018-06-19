@@ -12,7 +12,7 @@ public class Customer {
     private List<Product> allProducts ;
     private List<Product> cart = new ArrayList<>();
 
-    public Customer (ArrayList<Product> listOfProducts)
+    public Customer (List<Product> listOfProducts)
     {
         allProducts = listOfProducts;
     }
@@ -22,19 +22,16 @@ public class Customer {
      System.out.println("=====================================================================================");
      System.out.println("P.NO.\t\tNAME\t\tQUANTITY\t\tPRICE\t\tDISCOUNT\t\tDISCOUNTED PRICE");
      System.out.println("=====================================================================================");
-
         for(Product p:allProducts)
         {
           System.out.println(p.toStringMenuStyle());
         }
-
     }
 
 
 
     public void placeOrder()
     {
-
         showProductMenu();
         Scanner in = new Scanner(System.in);
         int ch;
@@ -121,7 +118,6 @@ public class Customer {
                     f=1;
                     break;
                 }
-
 
             }
 
