@@ -9,14 +9,7 @@ import java.util.ArrayList;
 import static junit.framework.TestCase.assertEquals;
 
 public class AdminTest {
-    @Test
-    public void productDetailsTest()
-    {
-        Product p = new Product(111,"test",8,60f,10f,54f);
-               Admin a = new Admin();
-               assertEquals(p,a.enterProductDetails());
 
-    }
     ArrayList<Product> listOfProduct = new ArrayList<>();
 
     @Before
@@ -28,11 +21,29 @@ public class AdminTest {
         listOfProduct.add(pp);
 
     }
+
     @Test
+    void displaySpecialTest() {
+        Admin a = new Admin(listOfProduct);
+        a.displaySpecial();
+    }
+    @Test
+    public void productDetailsTest()
+    {
+        // Product p = new Product(111,"test",8,60f,10f,54f);
+        Admin a = new Admin(listOfProduct);
+        assertEquals(false,a.validateInput(99,"test1",-1,60f,10f));
+        assertEquals(false,a.validateInput(99,"test2",10,0,10f));
+        assertEquals(true,a.validateInput(100,"test3",86,60.4f,10.5f));
+
+    }
+
+    @Test
+
     public  void checkIfExistTest()
      {
          Admin a = new Admin(listOfProduct);
-         assertEquals(true,a.checkIfExists(10));
+         assertEquals(true,a.checkIfExists(22));
          assertEquals(false,a.checkIfExists(55));
      }
 

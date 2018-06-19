@@ -27,77 +27,49 @@ public class Admin {
 
     }
 
+    String getUserInput(String msg)
+    {
+        Scanner in = new Scanner(System.in);
+        System.out.println(msg);
+        return in.next();
+    }
+
     public Product enterProductDetails() {
 
-        Product p1 = new Product();
+
         Scanner in = new Scanner(System.in);
         int pno,qty;
-        float price,discount;
+        float price,discount,discountedPrice;
         String s;
-        boolean pnoFlag,ispnoPositive,isQtyValid,isPriceValid,isDiscountValid;
 
-        do { ispnoPositive=true;
-            System.out.println("Enter Product Number of the Product:  ");
-             pno = in.nextInt();
-            pnoFlag = checkIfExists(pno);
-            if (!pnoFlag)
-                p1.setProductNo(pno);
-            else System.out.println("Product Id already exists!");
-
-            if(pno<0)
-            {
-                System.out.println("Invalid Product Id ");
-                ispnoPositive=false;
-            }
-        }while(pnoFlag || !ispnoPositive);
-
-        System.out.println("Enter Name of the Product:  ");
-         s =in.next();
-        p1.setProductName(s);
-
-       do {
-           isQtyValid=true;
-           System.out.println("Enter Quantity of the Product:  ");
-           qty = in.nextInt();
-           if(qty>0)
-           p1.setQuantity(qty);
-
-           else
-           { isQtyValid=false;
-               System.out.println("Invalid Quantity ");
-           }
-       }while (!isQtyValid);
-
-       do { isPriceValid=true;
-           System.out.println("Enter Price of the Product:  ");
-           price = in.nextFloat();
-           if(price>0)
-           p1.setPrice(price);
-           else
-           { isPriceValid=false;
-               System.out.println("Invalid Price ");
-           }
-       }while (!isPriceValid);
+        pno = Integer.parseInt(getUserInput("Enter Product Number of the Product:"));
+        s =  getUserInput("Enter Name of the Product:  ");
+        qty = Integer.parseInt(getUserInput("Enter Quantity of the Product:"));
+        price = Float.parseFloat(getUserInput("Enter Price of the Product:"));
+        discount = Float.parseFloat(getUserInput("Enter Discount of the Product:"));
+        discountedPrice = price * (1 - (discount/100));
 
 
-       do {
-           isDiscountValid=true;
-           System.out.println("Enter Discount of the Product:  ");
-           discount = in.nextFloat();
-           if(discount>=0)
-           p1.setDiscount(discount);
-           else
-           { isDiscountValid=false;
-               System.out.println("Invalid Discount ");
-           }
+        boolean isInputValid = validateInput(pno,s,qty,price,discount);
+        if(isInputValid)
+        {
+            Product p1 = new Product(pno,s,qty,price,discount,discountedPrice);
+            return p1;
+        }
 
-       }while (!isDiscountValid);
+        else {
+            System.out.println("Invalid Details! Please Re-enter details: ");
 
-        float dPrice = price * (1 - (discount/100));
-        p1.setDiscountedPrice(dPrice);
+           return enterProductDetails();
+        }
 
+    }
 
-        return (p1);
+    public boolean validateInput(int pno, String s, int qty, float price, float discount) {
+
+        if(checkIfExists(pno)==false && pno>0 && qty>0 && price>0 && discount>=0)
+            return true;
+        else return false;
     }
 
     boolean checkIfExists(int pno)
